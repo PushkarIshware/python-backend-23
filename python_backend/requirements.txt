@@ -1,0 +1,13 @@
+Django==4.1
+pip==20.0.2
+djangorestframework==3.12.4
+psycopg2-binary==2.9.2
+psycopg2==2.9.3
+django-dotenv==1.4.2
+django-cors-headers==3.14.0
+pytest==6.2.5
+pytest-django==4.5.2
+pytest-json-report==1.5.0
+pytest-metadata==2.0.4
+pytz==2023.3
+djangorestframework-simplejwt==5.2.2
