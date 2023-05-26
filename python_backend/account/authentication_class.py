@@ -2,7 +2,7 @@ import jwt
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import authentication
 from rest_framework import exceptions
-
+import os
 User = get_user_model()
 
 class CustomJWTTokenAuthentication(authentication.BaseAuthentication):
@@ -12,7 +12,7 @@ class CustomJWTTokenAuthentication(authentication.BaseAuthentication):
         if not jwt_token:
             return None
         try:
-            payload = jwt.decode(jwt_token, 'secret', algorithms=['HS256'])
+            payload = jwt.decode(jwt_token, os.environ.get('JWT_TOKEN_SECRET_NAME'), algorithms=['HS256'])
             user = authenticate(email=payload['email'], password=payload['password'])
         except User.DoesNotExist:
             raise exceptions.AuthenticationFailed('No such user')

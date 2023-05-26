@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, JsonResponse
 # Create your views here.
@@ -38,17 +39,20 @@ class LoginUser(APIView):
         return render(request, 'login.html')
     
     def post(self, request):
-        User = get_user_model()
         email = request.data['email']
         password = request.data['password']
-
+        print(request.data)
         user = authenticate(email=email, password=password)
-        
+        print(user)
         if user and user.is_active:
             print("INSIDE IF USER")
             payload = {'email': email, 'password': password}
             
-            jwt_token = jwt.encode(payload, "secret", algorithm='HS256').decode('utf-8')
+            # sometimes this working
+            # jwt_token = jwt.encode(payload, os.environ.get('JWT_TOKEN_SECRET_NAME'), algorithm='HS256').decode('utf-8')
+            
+            # AND sometimes this working
+            jwt_token = jwt.encode(payload, os.environ.get('JWT_TOKEN_SECRET_NAME'), algorithm='HS256')
 
             print(jwt_token)
             # response = Response()
@@ -58,7 +62,8 @@ class LoginUser(APIView):
             return JsonResponse({"jwt_token": jwt_token})
         
         else:
-            return render(request, 'login.html')
+            return JsonResponse({"msg": "user not found"})
+            # return render(request, 'login.html')
 
 
 class Home(APIView):
